@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+*.tsbuildinfo
+.env
+.env.local
+design/*.png
+design/*.jpg
+.vercel
+
+.claude/settings.local.json
+.claude/agents/
+.claude/worktrees/

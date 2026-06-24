@@ -1,0 +1,112 @@
+# IntelDoc dev/pilot stack (spec §13): one host, Docker Compose.
+# Postgres + Redis + MinIO + app(uvicorn) + arq worker. All RU-resident in prod.
+#
+# The `migrate` one-shot connects as the Postgres superuser (inteldoc) so
+# migration 0001 can bootstrap the `app` / `admin_readonly` roles. The app and
+# worker then connect under the least-privileged `app` role.
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: inteldoc
+      POSTGRES_PASSWORD: inteldoc
+      POSTGRES_DB: inteldoc
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inteldoc -d inteldoc"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  createbuckets:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin &&
+      mc mb --ignore-existing local/inteldoc &&
+      echo 'bucket ready';
+      "
+
+  migrate:
+    build: .
+    command: uv run alembic upgrade head
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # superuser DSN so role bootstrap (migration 0001) can run
+      DATABASE_URL_MIGRATION: postgresql+psycopg://inteldoc:inteldoc@postgres:5432/inteldoc
+
+  app:
+    build: .
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      APP_ENV: dev
+      DATABASE_URL_APP: postgresql+asyncpg://app:app@postgres:5432/inteldoc
+      DATABASE_URL_ADMIN_READONLY: postgresql+asyncpg://admin_readonly:admin_readonly@postgres:5432/inteldoc
+      DATABASE_URL_MIGRATION: postgresql+psycopg://inteldoc:inteldoc@postgres:5432/inteldoc
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+      JWT_SIGNING_KEY: dev-insecure-change-me-min-32-bytes-long
+      AUDIT_PEPPER: dev-insecure-audit-pepper
+    ports:
+      - "8000:8000"
+
+  worker:
+    build: .
+    command: uv run arq app.workers.settings.WorkerSettings
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    environment:
+      APP_ENV: dev
+      DATABASE_URL_APP: postgresql+asyncpg://app:app@postgres:5432/inteldoc
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+      AUDIT_PEPPER: dev-insecure-audit-pepper
+
+volumes:
+  pgdata:
+  miniodata:

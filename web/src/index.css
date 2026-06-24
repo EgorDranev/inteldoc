@@ -1,0 +1,54 @@
+@import "./design/colors_and_type.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    font-family: var(--font-ui);
+    background: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    letter-spacing: var(--tracking-ui);
+  }
+  body {
+    @apply font-sans;
+  }
+}
+
+/* Bottom-sheet slide-in keyframe (used by primitives/BottomSheet). */
+@keyframes ds-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility: collapse all CSS-driven motion when the user opts out.
+   Framer Motion respects this via useReducedMotion; this block backs
+   that up for the Tailwind `transition-*` and `animate-*` utilities. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  .font-data {
+    font-family: var(--font-data);
+    font-variant-numeric: tabular-nums;
+  }
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-tight);
+  }
+}

@@ -1,0 +1,324 @@
+/* ============================================================
+   IntelDoc — Colors & Type
+   ------------------------------------------------------------
+   Tokens derived from the IntelDoc Figma file (pages
+   IntelDoc_UI + IntelDok) and the brand tokens in the spec.
+   ============================================================ */
+
+/* -----------  FONTS  ---------------------------------------- */
+/* Primary UI type = Manrope (mobile product UI, all weights)   */
+/* Secondary display = Montserrat / Montserrat Alternates       */
+/*   (used in pitch/marketing surfaces)                         */
+/* Tertiary = Inter (tables, dense data screens)                */
+/* Mono is not part of the brand — fall back to system mono.    */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Montserrat+Alternates:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+  /* ---------- Brand primitives (raw palette, Figma) ---------- */
+  --ink-900:        #0F1014;   /* near-black headings on light */
+  --ink-800:        #1F2024;   /* body headings */
+  --ink-700:        #2F3036;   /* body text primary */
+  --ink-600:        #494A50;   /* body text secondary */
+  --ink-500:        #71727A;   /* captions / tertiary */
+  --ink-400:        #8F9098;   /* disabled / hint */
+  --ink-300:        #C5C6CC;   /* borders */
+  --ink-200:        #D4D6DD;   /* dividers, strokes on light */
+  --ink-100:        #E8E9F1;   /* subtle surface */
+  --ink-050:        #F8F9FE;   /* card / subtle background */
+  --white:          #FFFFFF;
+
+  /* ============================================================
+     IntelDoc v.1 — medical B2B2C palette
+     Retuned from the real v.1 cockpit + mobile screens.
+
+     BRAND DECISION (2026-05): the product uses **medical indigo**
+     (--blue-600 #2563EB) as the single brand accent, not the bright
+     cyan from the original mascot / pitch deck. The Tailwind `cyan-*`
+     namespace is remapped to this indigo ramp in tailwind.config.js;
+     class names like `bg-cyan-500` are historical aliases, not actual
+     cyan. For accent text on dark navy surfaces use cyan-400 (#60A5FA)
+     — cyan-300 (#93C5FD) is too pale and was retired from this role.
+
+     Earlier Vasiliy/pitch-deck tokens are preserved as --legacy-*
+     at the bottom of this block for the marketing deck only.
+     ============================================================ */
+
+  /* Primary blue — medical indigo-blue (not the saturated cyan-blue of the
+     original mascot). This is the v.1 product blue: active tab pill,
+     "готовность к приёму" hero card, primary CTA. */
+  --blue-900:       #0B2A6B;
+  --blue-800:       #1E3A8A;
+  --blue-700:       #1D4ED8;
+  --blue-600:       #2563EB;   /* primary CTA / active tab */
+  --blue-500:       #3B82F6;   /* hero card bg */
+  --blue-400:       #60A5FA;
+  --blue-300:       #93C5FD;   /* chart highlight */
+  --blue-200:       #BFDBFE;   /* chip surface */
+  --blue-100:       #DBEAFE;   /* avatar bg, soft chip */
+  --blue-075:       #E7EFFE;
+  --blue-050:       #EFF6FF;   /* range band background */
+
+  /* Secondary / category tints — pastel fills visible on patient detail,
+     home recommendation cards, and category icons. Each has a dark
+     paired ink for the icon glyph / label. */
+  --mint-500:       #10B981;   /* success / "в норме" dot */
+  --mint-400:       #34D399;
+  --mint-300:       #6EE7B7;
+  --mint-100:       #D1FAE5;
+  --mint-050:       #ECFDF5;   /* mint card bg */
+
+  --amber-500:      #F59E0B;   /* out-of-range dot, warning icon */
+  --amber-400:      #FBBF24;
+  --amber-300:      #FCD34D;
+  --amber-100:      #FEF3C7;   /* warning banner bg */
+  --amber-050:      #FFFBEB;   /* amber metric-card bg */
+
+  --rose-600:       #E11D48;   /* error / "просрочено" badge */
+  --rose-500:       #F43F5E;
+  --rose-400:       #FB7185;
+  --rose-300:       #FDA4AF;
+  --rose-100:       #FFE4E6;
+  --rose-050:       #FFF1F2;   /* error alert bg */
+
+  --violet-600:     #7C3AED;
+  --violet-500:     #8B5CF6;   /* imaging / visualisation */
+  --violet-400:     #A78BFA;
+  --violet-100:     #EDE9FE;   /* lavender card bg */
+  --violet-050:     #F5F3FF;
+
+  --peach-500:      #FB923C;   /* requests / orange action */
+  --peach-400:      #FDBA74;
+  --peach-100:      #FFEDD5;   /* orange pastel card bg */
+
+  /* Slate neutrals — cooler than the legacy ink scale, matches v.1 pages */
+  --slate-900:      #0F172A;
+  --slate-800:      #1E293B;
+  --slate-700:      #334155;
+  --slate-600:      #475569;
+  --slate-500:      #64748B;
+  --slate-400:      #94A3B8;
+  --slate-300:      #CBD5E1;
+  --slate-200:      #E2E8F0;
+  --slate-100:      #F1F5F9;
+  --slate-050:      #F8FAFC;   /* page background */
+
+  /* Semantic roles (v.1, softer than the spec draft) */
+  --success:        #10B981;
+  --success-dark:   #059669;
+  --success-bg:     #ECFDF5;
+  --warning:        #F59E0B;
+  --warning-dark:   #D97706;
+  --warning-bg:     #FFFBEB;
+  --error:          #E11D48;
+  --error-dark:     #BE123C;
+  --error-bg:       #FFF1F2;
+
+  /* Legacy Vasiliy/pitch tokens — kept for the marketing deck + mascot */
+  --legacy-blue-700: #0341B4;
+  --legacy-blue-600: #006FFD;
+  --legacy-blue-300: #00BBFF;
+  --legacy-blue-200: #6FBAFF;
+  --legacy-blue-075: #DCF2FF;
+  --legacy-mint-500: #76FFD4;
+  --legacy-peach-500: #FFB37C;
+  --legacy-amber-500: #F8D041;
+  --legacy-violet-500: #8C00FF;
+
+  /* ---------- Light-mode semantic tokens (DEFAULT) ---------- */
+  --color-primary:          var(--blue-600);
+  --color-primary-hover:    var(--blue-700);
+  --color-primary-pressed:  var(--blue-800);
+  --color-primary-on:       var(--white);
+  --color-accent:           var(--blue-500);
+
+  --color-bg:               var(--slate-050);  /* page background */
+  --color-bg-soft:          var(--slate-100);  /* sunk panel */
+  --color-surface:          var(--white);      /* cards */
+  --color-surface-sunken:   var(--blue-050);   /* soft info panel */
+  --color-surface-muted:    var(--slate-100);  /* chip bg */
+
+  --color-text:             var(--slate-800);
+  --color-text-strong:      var(--slate-900);
+  --color-text-muted:       var(--slate-500);
+  --color-text-subtle:      var(--slate-400);
+  --color-text-on-primary:  var(--white);
+  --color-link:             var(--blue-600);
+
+  --color-border:           var(--slate-200);
+  --color-border-strong:    var(--slate-300);
+  --color-divider:          var(--slate-100);
+
+  --color-success:          var(--success);
+  --color-warning:          var(--warning);
+  --color-error:            var(--error);
+
+  /* ---------- Aliases (shortcuts used in UI-kit code) ---------- */
+  --bg-page:                var(--color-bg);
+  --success-600:            var(--success);
+  --warning-600:            var(--warning);
+  --error-600:              var(--error);
+
+  /* Data-viz — glycemia chart colors */
+  --chart-in-range:         var(--blue-500);
+  --chart-low:              var(--peach-500);  /* hypo */
+  --chart-high:             var(--amber-500);  /* hyper */
+  --chart-band:             var(--blue-050);   /* target-range band */
+  --chart-grid:             var(--ink-200);
+
+  /* Gradients */
+  --gradient-card:          linear-gradient(90deg, rgba(239,246,255,0.0) 0%, rgba(219,234,254,0.9) 100%);
+  --gradient-category-food:   linear-gradient(90deg, var(--mint-100)   0%, var(--blue-050) 100%);
+  --gradient-category-sugar:  linear-gradient(90deg, var(--peach-100)  0%, var(--blue-050) 100%);
+  --gradient-category-insulin:linear-gradient(90deg, var(--blue-100)   0%, var(--blue-050) 100%);
+  --gradient-mascot-halo:    radial-gradient(closest-side, rgba(147,197,253,0.55) 0%, rgba(147,197,253,0) 70%);
+
+  /* v.1 action-button pastel tints (patient-detail quick actions) */
+  --action-timeline-bg:   var(--blue-100);
+  --action-timeline-fg:   var(--blue-700);
+  --action-documents-bg:  var(--violet-100);
+  --action-documents-fg:  var(--violet-600);
+  --action-requests-bg:   var(--peach-100);
+  --action-requests-fg:   #C2410C;
+  --action-notes-bg:      var(--mint-100);
+  --action-notes-fg:      var(--success-dark);
+
+  /* Category tag colors (analyses / imaging / consult / notes) */
+  --cat-analysis-bg:   var(--blue-100);
+  --cat-analysis-fg:   var(--blue-700);
+  --cat-imaging-bg:    var(--violet-100);
+  --cat-imaging-fg:    var(--violet-600);
+  --cat-consult-bg:    var(--mint-100);
+  --cat-consult-fg:    var(--success-dark);
+  --cat-note-bg:       var(--amber-100);
+  --cat-note-fg:       #92400E;
+
+  /* ---------- Radii ---------- */
+  --radius-xs:  6px;
+  --radius-sm:  8px;
+  --radius-md:  12px;   /* buttons, chips */
+  --radius-lg:  16px;   /* cards */
+  --radius-xl:  20px;   /* large panels */
+  --radius-2xl: 24px;
+  --radius-pill: 999px;
+
+  /* ---------- Spacing (4-pt grid) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  /* ---------- Shadows / elevation ---------- */
+  --shadow-xs: 0 1px 2px rgba(15,16,20,0.04);
+  --shadow-sm: 0 2px 8px rgba(15,16,20,0.06);
+  --shadow-md: 0 8px 24px rgba(15,16,20,0.08);
+  --shadow-lg: 0 18px 40px rgba(3,65,180,0.12);
+  --shadow-focus: 0 0 0 4px rgba(0,111,253,0.16);
+
+  /* ---------- Motion ---------- */
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:      120ms;
+  --dur-base:      200ms;
+  --dur-slow:      360ms;
+
+  /* ---------- Type ramp ---------- */
+  /* Base = Manrope for product, Montserrat for display heads */
+  --font-ui:       "Manrope", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display:  "Montserrat Alternates", "Montserrat", "Manrope", sans-serif;
+  --font-data:     "Inter", "Manrope", sans-serif;
+  --font-mono:     ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* mobile-first type scale */
+  --fs-display-xl: clamp(44px, 6vw, 96px);
+  --fs-display-lg: clamp(34px, 4.5vw, 64px);
+  --fs-display:    clamp(28px, 3.2vw, 44px);
+  --fs-h1:         24px;
+  --fs-h2:         20px;
+  --fs-h3:         18px;   /* section titles, greetings */
+  --fs-body:       14px;
+  --fs-body-lg:    16px;
+  --fs-caption:    12px;
+  --fs-micro:      10px;
+
+  --lh-tight:   1;
+  --lh-snug:    1.2;
+  --lh-body:    1.4;
+  --lh-loose:   1.6;
+
+  --tracking-tight: -0.02em;
+  --tracking-ui:    0.005em;
+  --tracking-caps:  0.04em;
+}
+
+/* -----------  DARK MODE  ----------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary:          #4FA8D8;
+    --color-primary-hover:    #6CB7E0;
+    --color-primary-pressed:  #3A90C2;
+    --color-accent:           #4DB6C4;
+
+    --color-bg:               #141718;
+    --color-bg-soft:          #191C1E;
+    --color-surface:          #1E2224;
+    --color-surface-sunken:   #232729;
+
+    --color-text:             #D4D8DB;
+    --color-text-strong:      #F1F3F5;
+    --color-text-muted:       #8A9499;
+    --color-text-subtle:      #5F6B71;
+    --color-text-on-primary:  #0B1014;
+
+    --color-border:           #2A2F32;
+    --color-border-strong:    #373C40;
+    --color-divider:          #23272A;
+
+    --color-success:          #66BB6A;
+    --color-warning:          #FFA726;
+    --color-error:            #EF5350;
+
+    --chart-band:             #1B2833;
+    --chart-grid:             #2A2F32;
+
+    --shadow-md: 0 8px 24px rgba(0,0,0,0.45);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.55);
+  }
+}
+
+/* -----------  SEMANTIC TEXT ELEMENTS  ---------------------- */
+body, .t-body {
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.t-display-xl { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-display-xl); line-height: .95; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.t-display-lg { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-display-lg); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.t-display    { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-display);    line-height: 1.05; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+
+.t-h1 { font-family: var(--font-ui); font-weight: 700; font-size: var(--fs-h1); line-height: var(--lh-snug); letter-spacing: var(--tracking-ui); color: var(--color-text-strong); }
+.t-h2 { font-family: var(--font-ui); font-weight: 700; font-size: var(--fs-h2); line-height: var(--lh-snug); letter-spacing: var(--tracking-ui); color: var(--color-text-strong); }
+.t-h3 { font-family: var(--font-ui); font-weight: 700; font-size: var(--fs-h3); line-height: var(--lh-tight); letter-spacing: var(--tracking-ui); color: var(--color-text-strong); }
+
+.t-body-lg { font-size: var(--fs-body-lg); line-height: var(--lh-body); color: var(--color-text); }
+.t-body    { font-size: var(--fs-body);    line-height: var(--lh-body); color: var(--color-text); }
+.t-caption { font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--color-text-muted); }
+.t-micro   { font-size: var(--fs-micro);   line-height: var(--lh-body); color: var(--color-text-muted); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+
+.t-link    { color: var(--color-link); font-weight: 700; text-decoration: none; }
+.t-link:hover { text-decoration: underline; }
+
+.t-data-xl { font-family: var(--font-data); font-weight: 700; font-size: 28px; line-height: 1; letter-spacing: -0.01em; }
+.t-data-lg { font-family: var(--font-data); font-weight: 700; font-size: 20px; line-height: 1; }
+.t-data    { font-family: var(--font-data); font-weight: 600; font-size: 14px; line-height: 1; font-variant-numeric: tabular-nums; }

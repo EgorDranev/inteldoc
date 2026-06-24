@@ -1,0 +1,18 @@
+# IntelDoc reverse proxy (used by docker-compose.prod.yml).
+# Caddy obtains + auto-renews a Let's Encrypt cert for {$DOMAIN} and reverse-proxies
+# all traffic to the FastAPI app on the internal network (app:8000). HTTP is
+# auto-redirected to HTTPS by Caddy. {$DOMAIN} is read from the compose environment.
+
+{$DOMAIN} {
+	encode zstd gzip
+
+	# The API is mounted under /v1 (health is /v1/healthz). The frontend (Vercel)
+	# calls https://{$DOMAIN}/v1/... directly, so a single catch-all proxy is enough.
+	reverse_proxy app:8000
+
+	# Light access logging to stdout (visible via `docker compose logs -f caddy`).
+	log {
+		output stdout
+		format console
+	}
+}

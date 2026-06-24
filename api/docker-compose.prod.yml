@@ -1,0 +1,180 @@
+# IntelDoc PROD/pilot stack (spec §13): one RU-resident VPS, Docker Compose.
+# Postgres 16 + Redis 7 + MinIO + migrate(one-shot) + app(uvicorn) + arq worker,
+# fronted by Caddy which terminates HTTPS (automatic Let's Encrypt) and reverse-
+# proxies to app:8000. This is a clinical-pilot DEMO host (no real PHI), but it is
+# persistent — secrets are real, ports are not casually exposed.
+#
+# Differences vs docker-compose.yml (dev):
+#   - All secrets/hosts come from .env (env_file:), nothing hardcoded.
+#   - Postgres / Redis / MinIO are NOT published to the host — internal network only.
+#     The ONLY public ports are Caddy's 80 and 443.
+#   - restart: unless-stopped on every long-running service so the stack survives
+#     reboots and transient crashes.
+#   - The migrate one-shot still connects as the Postgres superuser so migration 0001
+#     can bootstrap the least-privileged `app` / `admin_readonly` roles; app + worker
+#     then run under those least-privileged roles (same contract as dev).
+#
+# Run:   docker compose -f docker-compose.prod.yml up -d --build
+# See:   DEPLOY.md for the full VPS runbook (DNS, secrets, seed, frontend wiring).
+#
+# --- Reverse proxy / TLS note -------------------------------------------------
+# Caddy is used for simplicity: it obtains and renews a Let's Encrypt certificate
+# automatically for ${DOMAIN}, with zero extra config beyond the Caddyfile below.
+# Caddy requires a public DNS A-record for ${DOMAIN} -> this VPS, and ports 80/443
+# reachable from the internet (80 is needed for the ACME HTTP-01 challenge).
+#
+# Alternative (nginx + certbot): if you prefer nginx, replace the `caddy` service
+# with an `nginx` service mounting a server block that proxy_passes to app:8000,
+# plus a `certbot` sidecar (image: certbot/certbot) that writes certs into a shared
+# volume and a renewal cron. Caddy is recommended here because it removes the manual
+# cert issuance/renewal step entirely.
+# -----------------------------------------------------------------------------
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    # Superuser bootstrap creds come from .env. The migration role uses these same
+    # superuser creds (see migrate service) so role bootstrap in migration 0001 runs.
+    environment:
+      POSTGRES_USER: ${POSTGRES_SUPERUSER}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    # No host port published in prod — only reachable on the internal compose network.
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_SUPERUSER} -d ${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    # No host port published in prod.
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY}
+    # No host ports published in prod (API :9000 and console :9001 stay internal).
+    # If you need the MinIO console for ops, tunnel it: `ssh -L 9001:localhost:9001 ...`
+    # after temporarily adding a published port, or expose it behind Caddy on a subpath.
+    #
+    # EXTERNAL S3 ALTERNATIVE: to use a managed bucket (e.g. Yandex Object Storage)
+    # instead of in-stack MinIO, delete this `minio` + `createbuckets` service, drop
+    # their `depends_on` from app/worker, and in .env point S3_ENDPOINT_URL /
+    # S3_ACCESS_KEY / S3_SECRET_KEY / S3_BUCKET / S3_REGION at the managed bucket.
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # One-shot: create the `inteldoc` bucket (same as dev's createbuckets), idempotent.
+  createbuckets:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 ${S3_ACCESS_KEY} ${S3_SECRET_KEY} &&
+      mc mb --ignore-existing local/${S3_BUCKET} &&
+      echo 'bucket ready';
+      "
+
+  # One-shot: run Alembic migrations as the superuser so migration 0001 can create
+  # the least-privileged `app` / `admin_readonly` roles. Exits 0 on success; app +
+  # worker wait for service_completed_successfully.
+  migrate:
+    build: .
+    command: uv run alembic upgrade head
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Superuser DSN (psycopg/sync) so role bootstrap runs. Built from .env parts.
+      DATABASE_URL_MIGRATION: postgresql+psycopg://${POSTGRES_SUPERUSER}:${POSTGRES_SUPERUSER_PASSWORD}@postgres:5432/${POSTGRES_DB}
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    # Internal network names override the .env localhost defaults so the container
+    # reaches its sibling services. Everything else (secrets, CORS, OCR) flows from .env.
+    environment:
+      # The `app` / `admin_readonly` role passwords are PINNED by migration 0001
+      # (CREATE ROLE app LOGIN PASSWORD 'app'). The roles are reachable only on the
+      # internal compose network (Postgres publishes no host port), so the pinned
+      # literals are acceptable for the demo. Hardening: add a post-migrate one-shot
+      # that runs `ALTER ROLE app PASSWORD ...` from .env, then parameterise here.
+      DATABASE_URL_APP: postgresql+asyncpg://app:app@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL_ADMIN_READONLY: postgresql+asyncpg://admin_readonly:admin_readonly@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+    # No host port published — Caddy proxies to app:8000 over the internal network.
+    expose:
+      - "8000"
+
+  worker:
+    build: .
+    restart: unless-stopped
+    command: uv run arq app.workers.settings.WorkerSettings
+    env_file: .env
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      # Pinned `app` role password — see the app service note above.
+      DATABASE_URL_APP: postgresql+asyncpg://app:app@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+
+  # Reverse proxy + automatic HTTPS. Only this service is internet-facing.
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      # Used by the Caddyfile site address (auto-TLS) and the reverse-proxy upstream.
+      DOMAIN: ${DOMAIN}
+    ports:
+      - "80:80"    # ACME HTTP-01 challenge + HTTP->HTTPS redirect
+      - "443:443"  # public HTTPS
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data      # issued certs + ACME account (MUST persist)
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:
+  caddy_data:
+  caddy_config:

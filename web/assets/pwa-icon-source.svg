@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    IntelDoc PWA icon — navy rounded square with the "iD" brand mark.
+    Mirrors CoBrandLockup's intelMark (navy field, white/cyan letters).
+    Navy field #0B1B3B (brand background_color), white "i", cyan "D" (#2563EB).
+    The safe area for the maskable variant is the central ~80% — the "iD"
+    glyphs are kept well inside that radius so platform masks never clip them.
+  -->
+  <rect width="512" height="512" rx="112" fill="#0B1B3B"/>
+  <!-- "i" — dot + stem, white -->
+  <circle cx="178" cy="150" r="26" fill="#FFFFFF"/>
+  <rect x="152" y="206" width="52" height="156" rx="22" fill="#FFFFFF"/>
+  <!-- "D" — cyan accent, drawn as an outer/inner rounded form -->
+  <path
+    d="M250 150 H316 C372 150 414 196 414 256 C414 316 372 362 316 362 H250 V150 Z M306 206 H306 H290 V306 H306 C336 306 358 284 358 256 C358 228 336 206 306 206 Z"
+    fill="#2563EB"
+    fill-rule="evenodd"
+  />
+</svg>

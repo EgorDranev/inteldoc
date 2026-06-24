@@ -1,0 +1,82 @@
+[project]
+name = "inteldoc-server"
+version = "0.1.0"
+description = "IntelDoc backend — Эндокор pilot MVP (layered modular monolith)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30",
+    "psycopg[binary]>=3.2",
+    "alembic>=1.14",
+    "arq>=0.26",
+    "redis>=5.2",
+    "pyjwt>=2.10",
+    "argon2-cffi>=23.1",
+    "boto3>=1.35",
+    "structlog>=24.4",
+    "python-multipart>=0.0.12",
+    "httpx>=0.28",
+    # OCR (real engine; active only when OCR_ENGINE=tesseract). Pillow decodes the
+    # uploaded image; pytesseract wraps the system `tesseract` binary; pdf2image
+    # rasterises PDF lab reports via system `poppler` (see Dockerfile).
+    "pytesseract>=0.3.13",
+    "pillow>=11.0",
+    "pdf2image>=1.17",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pip-audit>=2.7",
+    "boto3-stubs[s3]>=1.35",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: requires Postgres/Redis/MinIO (Docker compose stack)",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "RUF"]
+# B008: FastAPI Depends() in defaults is idiomatic.
+# RUF001/002/003: Russian prose in comments/docstrings/copy is a project convention.
+# RUF012: SQLAlchemy __table_args__ uses a dict/tuple literal by convention.
+ignore = ["B008", "RUF001", "RUF002", "RUF003", "RUF012"]
+
+[tool.ruff.lint.per-file-ignores]
+# Test fixtures carry long inline SQL; line length is noise there.
+"tests/**" = ["E501"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["pydantic.mypy"]
+warn_unused_ignores = false
+# integration/ tests touch live infra; keep strict on app/ + domain
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+# pytesseract / pdf2image ship no type stubs.
+[[tool.mypy.overrides]]
+module = ["pytesseract.*", "pdf2image.*"]
+ignore_missing_imports = true
