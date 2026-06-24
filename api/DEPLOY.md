@@ -84,7 +84,7 @@ Then edit `.env` and set, at minimum:
 - `POSTGRES_SUPERUSER_PASSWORD` — strong superuser/bootstrap password.
 - `S3_ACCESS_KEY`, `S3_SECRET_KEY` — strong MinIO root creds.
 - `JWT_SIGNING_KEY`, `AUDIT_PEPPER` — paste the `openssl` output.
-- `CORS_ORIGINS` — your Vercel origin, e.g. `https://inteldoc-prototype.vercel.app`
+- `CORS_ORIGINS` — your Vercel origin, e.g. `https://your-frontend.vercel.app`
   (see step h).
 - `OCR_ENGINE` — `tesseract` if the Tesseract-enabled image is built (see note in
   `.env.prod.example`), otherwise leave `stub`.
@@ -222,12 +222,12 @@ Set `CORS_ORIGINS` in `.env` to **exactly** the Vercel origin (scheme + host, no
 trailing slash, no path):
 
 ```
-CORS_ORIGINS=https://inteldoc-prototype.vercel.app
+CORS_ORIGINS=https://your-frontend.vercel.app
 ```
 
 - Multiple origins are **comma-separated** (e.g. a preview domain plus production):
   ```
-  CORS_ORIGINS=https://inteldoc-prototype.vercel.app,https://inteldoc-prototype-git-main.vercel.app
+  CORS_ORIGINS=https://your-frontend.vercel.app,https://your-frontend-git-main.vercel.app
   ```
 - After editing `.env`, recreate the app so it re-reads the env:
   ```bash

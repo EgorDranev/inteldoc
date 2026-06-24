@@ -120,23 +120,23 @@ export default function Support() {
             <DestinationCard
               icon={<Phone size={19} strokeWidth={2.2} />}
               title="Регистратура Эндокор"
-              subtitle="Перенос визита и вопросы по записи. +7 (495) 124-44-00"
+              subtitle="Перенос визита и вопросы по записи. +7 (495) 000-00-00"
               sla="Ответ в течение рабочего дня"
-              href="tel:+74951244400"
+              href="tel:+74950000000"
             />
             <DestinationCard
               icon={<Mail size={19} strokeWidth={2.2} />}
               title="Поддержка IntelDoc"
-              subtitle="Приложение, загрузка, распознавание. support@inteldoc.ru"
+              subtitle="Приложение, загрузка, распознавание. support@inteldoc.example"
               sla="Ответ в течение 1 рабочего дня"
-              href="mailto:support@inteldoc.ru"
+              href="mailto:support@inteldoc.example"
             />
             <DestinationCard
               icon={<Mail size={19} strokeWidth={2.2} />}
               title="Администратор Эндокор"
-              subtitle="Вопросы по доступам и согласиям. admin@endocrincentr.ru"
+              subtitle="Вопросы по доступам и согласиям. admin@endokor.example"
               sla="Ответ в течение 1–2 рабочих дней"
-              href="mailto:admin@endocrincentr.ru"
+              href="mailto:admin@endokor.example"
             />
           </div>
         </section>

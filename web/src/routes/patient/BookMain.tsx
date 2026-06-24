@@ -79,7 +79,7 @@ export default function BookMain() {
           </div>
 
           <a
-            href="tel:+74951244400"
+            href="tel:+74950000000"
             className="rounded-2xl bg-white p-4 flex items-center gap-3 hover:bg-slate-50 transition-colors"
           >
             <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-500">
@@ -88,7 +88,7 @@ export default function BookMain() {
             <div className="min-w-0 flex-1">
               <p className="text-[14px] font-bold text-ink-strong">Связаться с ресепшен Эндокор</p>
               <p className="text-caption text-ink-muted leading-snug mt-0.5">
-                +7 (495) 124-44-00 · перенести или уточнить визит
+                +7 (495) 000-00-00 · перенести или уточнить визит
               </p>
             </div>
           </a>
