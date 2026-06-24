@@ -280,7 +280,7 @@ const ADMIN_GRANT_SPECS: AdminGrantSpec[] = [
 export const ACCESS_AUDIT_SEED: AccessGrant[] = ADMIN_GRANT_SPECS.map((g) => ({
   id: g.id,
   patientId: g.patientId,
-  clinicId: 'enc',
+  clinicId: 'endokor',
   scope: 'lifetime-clinic',
   grantedAt: g.granted,
   expiresAt: g.expires,
@@ -309,7 +309,7 @@ export const COMPLIANCE_CHECKS_SEED: ComplianceChecks = {
 export const COMPLIANCE_STATE_SEED: ComplianceState = 'green'
 
 /** Department list used by onboarding/admin pickers. */
-export const ENC_DEPARTMENTS: string[] = [
+export const PARTNER_DEPARTMENTS: string[] = [
   'Эндокринология',
   'Терапия',
   'Лабдиагностика',

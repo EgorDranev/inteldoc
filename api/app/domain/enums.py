@@ -319,8 +319,8 @@ class SupportCategory(StrEnum):
 class TicketDestination(StrEnum):
     INTELDOC_SUPPORT = "inteldoc_support"
     INTELDOC_SECURITY = "inteldoc_security"
-    ENC_REGISTRY = "enc_registry"
-    ENC_ADMIN = "enc_admin"
+    PARTNER_REGISTRY = "partner_registry"
+    PARTNER_ADMIN = "partner_admin"
 
 
 class TicketDeliveryStatus(StrEnum):

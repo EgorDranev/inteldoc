@@ -32,7 +32,7 @@ class SupportTicketCreateIn(BaseModel):
 
 
 class TicketRoutingOut(BaseModel):
-    destination: str  # inteldoc_support | inteldoc_security | enc_registry | enc_admin
+    destination: str  # inteldoc_support | inteldoc_security | partner_registry | partner_admin
     label: str  # «поддержка IntelDoc» / «администратор Эндокор» / …
     sla_hours: int
     sla_label: str  # «в течение 4 часов»

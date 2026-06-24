@@ -139,7 +139,7 @@ export async function signAccessGrant(
     phone: draft.phone.trim(),
     email: draft.email?.trim() || undefined,
     identifiers: {},
-    partnerClinic: 'enc',
+    partnerClinic: 'endokor',
     department: 'Отделение диабетологии',
     attendingDoctorId: 'd1',
     createdAt: ts,
@@ -155,8 +155,8 @@ export async function signAccessGrant(
     documentHash,
     signedAt: ts,
     signatureMethod: 'mock_no_otp',
-    recipientClinicId: 'enc',
-    partnerId: 'enc',
+    recipientClinicId: 'endokor',
+    partnerId: 'endokor',
   }
 
   setState((s) => ({
@@ -169,7 +169,7 @@ export async function signAccessGrant(
       {
         id: grantId,
         patientId,
-        clinicId: 'enc',
+        clinicId: 'endokor',
         scope: 'lifetime-clinic',
         grantedAt: ts,
         // Lifetime clinic grant — no expiry (the patient app renders
@@ -246,7 +246,7 @@ export async function finalizeOnboarding(): Promise<ConsentBundle | null> {
           typeof navigator !== 'undefined' ? navigator.userAgent : 'node',
         consents: draftConsents,
         linkedEsignId: linkedEsign.id,
-        partnerId: 'enc',
+        partnerId: 'endokor',
       }
     : null
 
@@ -324,7 +324,7 @@ export async function submitConsentBundle(
       typeof navigator !== 'undefined' ? navigator.userAgent : 'node',
     consents,
     linkedEsignId: linkedEsign.id,
-    partnerId: 'enc',
+    partnerId: 'endokor',
   }
 
   setState((s) => ({
@@ -496,7 +496,7 @@ export async function loginPatientFromBackend(phone: string, code: string): Prom
       gender: identity?.gender ?? 'female',
       phone: phone.trim(),
       identifiers: identity?.oms ? { oms: identity.oms } : {},
-      partnerClinic: existing?.partnerClinic ?? 'enc',
+      partnerClinic: existing?.partnerClinic ?? 'endokor',
       department: existing?.department ?? 'Отделение диабетологии',
       attendingDoctorId: existing?.attendingDoctorId ?? 'd1',
       createdAt: existing?.createdAt ?? nowIso(),

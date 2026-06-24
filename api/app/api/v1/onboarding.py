@@ -30,7 +30,7 @@ router = APIRouter(prefix="/onboarding", tags=["onboarding"])
 
 @router.get("/partner-context", response_model=PartnerContextOut)
 async def partner_context(
-    session: AppSession, code: str = Query(default="enc")
+    session: AppSession, code: str = Query(default="endokor")
 ) -> PartnerContextOut:
     # Single pilot partner (Эндокор); `code` is the QR/link token placeholder.
     partner = await session.scalar(select(Partner).where(Partner.short_name == "Эндокор"))

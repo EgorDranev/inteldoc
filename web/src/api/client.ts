@@ -98,7 +98,7 @@ export const auth = {
 
 // --- Onboarding ---
 export const onboarding = {
-  partnerContext: (code = "enc") =>
+  partnerContext: (code = "endokor") =>
     request<Schemas["PartnerContextOut"]>("GET", `/onboarding/partner-context?code=${code}`),
   commit: (body: Schemas["CommitIn"]) =>
     request<Schemas["CommitOut"]>("POST", "/onboarding/commit", { body, idempotent: true }),

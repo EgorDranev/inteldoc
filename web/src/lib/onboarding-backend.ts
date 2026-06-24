@@ -88,7 +88,7 @@ export interface OnboardingCommitResult {
 export async function commitOnboardingBackend(
   input: OnboardingCommitInput,
 ): Promise<OnboardingCommitResult> {
-  const ctx = await onboarding.partnerContext('enc')
+  const ctx = await onboarding.partnerContext('endokor')
 
   const body: CommitIn = {
     department_public_id: ctx.department_public_id,

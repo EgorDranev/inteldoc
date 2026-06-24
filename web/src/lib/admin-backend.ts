@@ -201,7 +201,7 @@ function toAccessGrant(row: AccessRowBackend, index: number): AccessGrant {
     // A non-matching patientId so these never surface on the patient/doctor sides
     // (those filter by the real currentPatientId / patient ids).
     patientId: `be-admin-${row.grant_public_id}`,
-    clinicId: 'enc',
+    clinicId: 'endokor',
     scope: 'lifetime-clinic',
     grantedAt: dates.grantedAt,
     expiresAt: dates.expiresAt,

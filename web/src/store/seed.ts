@@ -48,8 +48,8 @@ export const SEED: InteldocState = {
       documentHash: 'mock-hash-p2',
       signedAt: '2026-04-05T10:01:00Z',
       signatureMethod: 'mock_no_otp',
-      recipientClinicId: 'enc',
-      partnerId: 'enc',
+      recipientClinicId: 'endokor',
+      partnerId: 'endokor',
     },
     {
       id: 'esign-p3',
@@ -57,8 +57,8 @@ export const SEED: InteldocState = {
       documentHash: 'mock-hash-p3',
       signedAt: '2026-04-08T09:31:00Z',
       signatureMethod: 'mock_no_otp',
-      recipientClinicId: 'enc',
-      partnerId: 'enc',
+      recipientClinicId: 'endokor',
+      partnerId: 'endokor',
     },
     {
       id: 'esign-p4',
@@ -66,8 +66,8 @@ export const SEED: InteldocState = {
       documentHash: 'mock-hash-p4',
       signedAt: '2026-04-12T11:01:00Z',
       signatureMethod: 'mock_no_otp',
-      recipientClinicId: 'enc',
-      partnerId: 'enc',
+      recipientClinicId: 'endokor',
+      partnerId: 'endokor',
     },
   ],
   consentBundles: [
@@ -78,7 +78,7 @@ export const SEED: InteldocState = {
       ipAddress: 'browser-unknown',
       userAgent: 'seed',
       linkedEsignId: 'esign-p2',
-      partnerId: 'enc',
+      partnerId: 'endokor',
       consents: [
         {
           id: 'clinic_access',
@@ -124,7 +124,7 @@ export const SEED: InteldocState = {
       ipAddress: 'browser-unknown',
       userAgent: 'seed',
       linkedEsignId: 'esign-p3',
-      partnerId: 'enc',
+      partnerId: 'endokor',
       consents: [
         {
           id: 'clinic_access',
@@ -168,7 +168,7 @@ export const SEED: InteldocState = {
       ipAddress: 'browser-unknown',
       userAgent: 'seed',
       linkedEsignId: 'esign-p4',
-      partnerId: 'enc',
+      partnerId: 'endokor',
       consents: [
         {
           id: 'clinic_access',
@@ -209,7 +209,7 @@ export const SEED: InteldocState = {
 
   clinics: [
     {
-      id: 'enc',
+      id: 'endokor',
       name: 'Клиника-партнёр',
       shortName: 'Эндокор',
       department: 'Отделение диабетологии',
@@ -221,7 +221,7 @@ export const SEED: InteldocState = {
       id: 'd1',
       name: 'Соколов А.В.',
       specialty: 'Эндокринолог',
-      clinicId: 'enc',
+      clinicId: 'endokor',
     },
   ],
 
@@ -237,7 +237,7 @@ export const SEED: InteldocState = {
       gender: 'female',
       phone: '+7 (916) 555-12-01',
       identifiers: { oms: '7700000000000001' },
-      partnerClinic: 'enc',
+      partnerClinic: 'endokor',
       department: 'Отделение диабетологии',
       attendingDoctorId: 'd1',
       createdAt: '2026-03-18T14:20:00Z',
@@ -256,7 +256,7 @@ export const SEED: InteldocState = {
       gender: 'male',
       phone: '+7 (916) 555-12-02',
       identifiers: { oms: '7700000000000002' },
-      partnerClinic: 'enc',
+      partnerClinic: 'endokor',
       department: 'Отделение диабетологии',
       attendingDoctorId: 'd1',
       createdAt: '2026-04-05T10:00:00Z',
@@ -277,7 +277,7 @@ export const SEED: InteldocState = {
       gender: 'female',
       phone: '+7 (916) 555-12-03',
       identifiers: { oms: '7700000000000003' },
-      partnerClinic: 'enc',
+      partnerClinic: 'endokor',
       department: 'Отделение диабетологии',
       attendingDoctorId: 'd1',
       createdAt: '2026-04-08T09:30:00Z',
@@ -300,7 +300,7 @@ export const SEED: InteldocState = {
       gender: 'male',
       phone: '+7 (916) 555-12-04',
       identifiers: { oms: '7700000000000004' },
-      partnerClinic: 'enc',
+      partnerClinic: 'endokor',
       department: 'Отделение диабетологии',
       attendingDoctorId: 'd1',
       createdAt: '2026-04-12T11:00:00Z',
@@ -320,7 +320,7 @@ export const SEED: InteldocState = {
     {
       id: 'ag-p2',
       patientId: 'p2',
-      clinicId: 'enc',
+      clinicId: 'endokor',
       scope: 'lifetime-clinic',
       grantedAt: '2026-04-05T10:01:00Z',
       department: 'Эндокринология',
@@ -329,7 +329,7 @@ export const SEED: InteldocState = {
     {
       id: 'ag-p3',
       patientId: 'p3',
-      clinicId: 'enc',
+      clinicId: 'endokor',
       scope: 'lifetime-clinic',
       grantedAt: '2026-04-08T09:31:00Z',
       department: 'Эндокринология',
@@ -338,7 +338,7 @@ export const SEED: InteldocState = {
     {
       id: 'ag-p4',
       patientId: 'p4',
-      clinicId: 'enc',
+      clinicId: 'endokor',
       scope: 'lifetime-clinic',
       grantedAt: '2026-04-12T11:01:00Z',
       department: 'Эндокринология',
@@ -637,7 +637,7 @@ export const SEED: InteldocState = {
       status: 'uploaded',
       uploadedAt: '2026-04-06T08:11:00Z',
       structureStatus: 'original-only',
-      sourceFacility: 'ГБУЗ ГП №220, Москва',
+      sourceFacility: 'Городская поликлиника',
       referralReason: 'Коррекция терапии СД 2 типа',
       referralDate: '2026-03-28',
     },
@@ -645,7 +645,7 @@ export const SEED: InteldocState = {
       id: 'doc-p2-other-discharge',
       patientId: 'p2',
       type: 'other',
-      label: 'Выписка после госпитализации, ГКБ №52',
+      label: 'Выписка после госпитализации, Городская больница (стационар)',
       originalFileUrl: '',
       qualityCheck: 'clear',
       status: 'uploaded',

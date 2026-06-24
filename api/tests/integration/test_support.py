@@ -112,7 +112,7 @@ async def test_integrity_report_routes_to_two_destinations(
     assert t["is_integrity_report"] is True
     dests = {d["destination"] for d in t["destinations"]}
     # Dual destination by default: IntelDoc (аудит/безопасность) + Эндокор (исправление).
-    assert dests == {"inteldoc_security", "enc_admin"}
+    assert dests == {"inteldoc_security", "partner_admin"}
     assert all(d["sla_label"] for d in t["destinations"])
 
 

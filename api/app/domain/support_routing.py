@@ -40,8 +40,8 @@ _DEST_META: dict[TicketDestination, tuple[str, int, str]] = {
         4,
         "в течение 4 часов",
     ),
-    TicketDestination.ENC_ADMIN: ("администратор Эндокор", 24, "в течение рабочего дня"),
-    TicketDestination.ENC_REGISTRY: ("регистратура Эндокор", 48, "в течение 2 рабочих дней"),
+    TicketDestination.PARTNER_ADMIN: ("администратор Эндокор", 24, "в течение рабочего дня"),
+    TicketDestination.PARTNER_REGISTRY: ("регистратура Эндокор", 48, "в течение 2 рабочих дней"),
 }
 
 
@@ -60,7 +60,7 @@ def route_for(category: SupportCategory) -> list[Destination]:
     if category in INTEGRITY_CATEGORIES:
         return [
             _dest(TicketDestination.INTELDOC_SECURITY),
-            _dest(TicketDestination.ENC_ADMIN),
+            _dest(TicketDestination.PARTNER_ADMIN),
         ]
     return [_dest(TicketDestination.INTELDOC_SUPPORT)]
 

@@ -279,7 +279,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "enc",
+              "default": "endokor",
               "title": "Code"
             }
           }

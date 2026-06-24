@@ -24,7 +24,7 @@ export default function ApiCheck() {
 
     const run = async () => {
       try {
-        const ctx = await onboarding.partnerContext('enc')
+        const ctx = await onboarding.partnerContext('endokor')
         push({ label: 'GET /onboarding/partner-context', ok: true, detail: ctx.partner_name })
 
         const phone = freshPhone()

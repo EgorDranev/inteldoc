@@ -50,7 +50,7 @@ inside `server/`:
 
 ```bash
 git clone <your-repo-url> inteldoc
-cd inteldoc/react-prototype/server
+cd inteldoc/api
 ```
 
 If you copy instead of clone, make sure these all land next to each other:
