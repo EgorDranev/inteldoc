@@ -79,7 +79,7 @@ const common = {
 // ─── Partner / clinic context ───────────────────────────────────────────────
 const partner = {
   shortName: 'Эндокор',
-  fullName: 'Медицинский центр «Эндокор»',
+  fullName: 'Клиника-партнёр',
   department: 'Отделение эндокринологии',
   diabetologyDepartment: 'Отделение диабетологии',
   lpu: 'Эндокор / ЛПУ №1',

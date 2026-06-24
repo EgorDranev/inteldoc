@@ -34,7 +34,7 @@ def seeded(superuser_engine: sa.Engine) -> dict[str, str]:
     with superuser_engine.begin() as c:
         c.execute(sa.text(
             "INSERT INTO app.partner (internal_id, public_id, name, short_name, created_at, updated_at)"
-            " VALUES (:i, :p, 'Медицинский центр «Эндокор»', 'Эндокор', now(), now())"
+            " VALUES (:i, :p, 'Клиника-партнёр', 'Эндокор', now(), now())"
         ), {"i": ids["partner"], "p": uuid.uuid4()})
         c.execute(sa.text(
             "INSERT INTO app.clinic (internal_id, public_id, partner_id, name, short_name, created_at, updated_at)"

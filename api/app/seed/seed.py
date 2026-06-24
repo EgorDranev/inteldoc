@@ -96,11 +96,11 @@ async def seed_demo() -> dict[str, Any]:
                     "created": False,
                 }
 
-            partner = Partner(name="Медицинский центр «Эндокор»", short_name="Эндокор")
+            partner = Partner(name="Клиника-партнёр", short_name="Эндокор")
             session.add(partner)
             await session.flush()
             clinic = Clinic(
-                partner_id=partner.internal_id, name="Медицинский центр «Эндокор»",
+                partner_id=partner.internal_id, name="Клиника-партнёр",
                 short_name="Эндокор",
             )
             session.add(clinic)

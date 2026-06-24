@@ -210,7 +210,7 @@ export const SEED: InteldocState = {
   clinics: [
     {
       id: 'enc',
-      name: 'Медицинский центр «Эндокор»',
+      name: 'Клиника-партнёр',
       shortName: 'Эндокор',
       department: 'Отделение диабетологии',
     },

@@ -2,7 +2,7 @@ import type { Analysis, PlanItem } from '../types'
 
 export const PARTNER = {
   name: 'Эндокор',
-  fullName: 'Медицинский центр «Эндокор»',
+  fullName: 'Клиника-партнёр',
   department: 'Отделение эндокринологии',
   lpu: 'Эндокор / ЛПУ №1',
 }

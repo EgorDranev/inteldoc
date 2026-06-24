@@ -44,7 +44,7 @@ export interface ConsentSpec {
   controlItems?: { iconId: 'rotate' | 'lock' | 'shield'; text: string }[]
 }
 
-const PARTNER_CLINIC = 'Медицинский центр «Эндокор»'
+const PARTNER_CLINIC = 'Клиника-партнёр'
 
 // ─── Block A · Persоnal data (152-ФЗ ст. 9) ─────────────────────────────────
 const A_FULL_TEXT = `СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ
