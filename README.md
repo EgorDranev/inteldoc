@@ -2,7 +2,7 @@
 
 **Preparation-before-visit for endocrinology care — one system, three role-scoped surfaces.**
 
-IntelDoc turns the gap between booking and seeing a doctor into useful work: the patient prepares at home (uploads documents, reviews OCR-extracted lab values, follows a plan), and the clinician opens an already-structured, doctor-ready summary instead of starting cold. A partner-clinic admin watches adoption and access — never the clinical content.
+IntelDoc turns the waiting time before an endocrinology visit into structured preparation across three role-scoped surfaces: patients prepare at home, clinicians start with a doctor-ready summary, and clinic admins track adoption and operational effectiveness.
 
 A full-stack pilot build for a real clinical pilot: a React front end covering all three surfaces, and a FastAPI/PostgreSQL backend that makes the patient → doctor → admin loop real — OTP auth, uploads, OCR, audit, server-enforced access control, and admin KPIs.
 
