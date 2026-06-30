@@ -4,9 +4,12 @@
 
 IntelDoc turns the gap between booking and seeing a doctor into useful work: the patient prepares at home (uploads documents, reviews OCR-extracted lab values, follows a plan), and the clinician opens an already-structured, doctor-ready summary instead of starting cold. A partner-clinic admin watches adoption and access — never the clinical content.
 
-This repository is a full-stack **prototype** built for a clinical pilot: a React front end covering all three surfaces, and a FastAPI backend that makes the patient → doctor → admin loop real (auth, uploads, OCR, audit, access control, KPIs).
+A full-stack pilot build for a real clinical pilot: a React front end covering all three surfaces, and a FastAPI/PostgreSQL backend that makes the patient → doctor → admin loop real — OTP auth, uploads, OCR, audit, server-enforced access control, and admin KPIs.
 
-> **Anonymized showcase.** The pilot partner clinic is referred to here by a placeholder name (**«Эндокор»**). Data is fully synthetic — no real patients, no PHI. A hosted demo exists but is omitted here to keep the partner anonymous.
+**What it demonstrates:** full-stack product engineering across mobile + web, a real auth / upload / OCR / audit backend, and compliance-aware design — explicit access transparency, a PII-blind admin role, and consultative-only AI.
+
+> **Anonymized portfolio showcase — production code is private (NDA).**
+> The production IntelDoc codebase is confidential and under NDA. This repository is a **self-contained, representative subset** rebuilt for public showcase: the partner clinic is a placeholder (**«Эндокор»**), all data is **synthetic** (no real patients, no PHI), and partner-specific and production-only pieces (multi-partner isolation, the live deployment pipeline, real integrations) are omitted. It runs locally and is faithful to the real architecture — it just isn't the production tree.
 
 ---
 
@@ -18,7 +21,7 @@ This repository is a full-stack **prototype** built for a clinical pilot: a Reac
 | **Doctor** | Endocrinologist | Desktop (≥1280 px) | Today's queue with prep status at a glance → open a prepared patient → three-section summary (analyses · gaps · questions) |
 | **Admin** | Partner-clinic admin | Desktop (≥1280 px) | Adoption / prep-rate KPIs → access audit log → revoke / extend / inspect any grant — **PII-blind** (aggregates + masked identifiers only) |
 
-Role is selected via a dev-only switcher; the prototype simulates auth. All three surfaces read from one shared state, so a single action — e.g. an admin revoking access — propagates across the patient app, the doctor queue, and the audit log at once.
+Role is selected via a dev-only switcher; the showcase simulates auth. All three surfaces read from one shared state, so a single action — e.g. an admin revoking access — propagates across the patient app, the doctor queue, and the audit log at once.
 
 ---
 
@@ -47,17 +50,17 @@ confirm next appointment         (revoke/extend) ◀─────────�
 - **Real patient OTP auth with a fail-closed prod gate.** Phone + SMS one-time code behind a vendor-neutral provider seam; codes are stored hashed (dedicated pepper), TTL'd, attempt-capped, with a persistent per-phone lockout that survives code rotation. The app **refuses to boot** in production on the mock provider, so the demo «0000» shortcut can never silently ship.
 - **OCR pipeline.** Uploaded lab images run through Tesseract + a Russian lab-report parser; low-confidence fields are surfaced for review. The patient reviews values **read-only** and flags misreads (a data-integrity report) — they never rewrite clinical content; the doctor verifies/flags OCR with a name + timestamp audit stamp.
 - **PII-blind admin cockpit.** Admin endpoints serve only aggregates and masked identifiers — the admin role can never read a patient's clinical content, enforced server-side.
-- **Auditable access control.** Every access subject is an HMAC-peppered identifier; grants, revokes, and extensions are logged and attributable.
-- **Consultative AI, not diagnostic.** The patient-side assistant («Василий») helps with preparation, clarification, and plan guidance — never diagnosis, treatment, or prescription. Disclaimers accompany every AI-like summary.
+- **Auditable, server-enforced access control.** Postgres **row-level security** plus HMAC-peppered access identifiers keep the access model enforced in the database, not just the application layer; grants, revokes, and extensions are logged and attributable.
+- **Consultative AI, not diagnostic.** The patient-side assistant («Василий») helps with preparation, clarification, and plan guidance — never diagnosis, treatment, or prescription. Disclaimers accompany every AI-like summary. *(In this showcase the assistant is a prototype-only, clearly-flagged browser call; production routes all inference server-side — see the note in `web/src/services/vasilyLlm.ts`.)*
 - **97 backend tests** (unit + integration over a real Postgres/Redis/MinIO stack + schema/contract invariants).
 
 ---
 
 ## Tech stack
 
-**Frontend** (`web/`) — Vite · React 18 · TypeScript · React Router · Zustand · Framer Motion · Tailwind · Lucide. Mobile-first patient app + dense desktop doctor/admin surfaces.
+**Frontend** (`web/`) — Vite · React 18 · TypeScript · React Router · Zustand · Framer Motion · Tailwind · Lucide · PWA. Mobile-first patient app + dense desktop doctor/admin surfaces.
 
-**Backend** (`api/`) — Python 3.13 · FastAPI · Pydantic v2 · SQLAlchemy 2 (async) · Alembic · PostgreSQL · Redis 7 · arq (workers) · MinIO / S3 · Tesseract OCR · Docker Compose · Caddy (auto-TLS). Layered modular monolith.
+**Backend** (`api/`) — Python 3.13 · FastAPI · Pydantic v2 · SQLAlchemy 2 (async) · Alembic · PostgreSQL (row-level security) · Redis 7 · arq (workers) · MinIO / S3 · Tesseract OCR · Docker Compose · Caddy (auto-TLS). Layered modular monolith.
 
 ---
 
@@ -87,7 +90,7 @@ curl -s localhost:8000/v1/healthz
 
 ```
 inteldoc/
-├── web/   React prototype — patient (mobile) + doctor & admin (desktop) surfaces
+├── web/   React app — patient (mobile) + doctor & admin (desktop) surfaces
 └── api/   FastAPI backend — auth, onboarding, uploads, OCR, plan loop, admin aggregates, audit
 ```
 
@@ -95,6 +98,6 @@ inteldoc/
 
 ## Disclaimers
 
-A prototype optimized for pilot clarity, not production completeness. Mocked/simulated where it should be (OCR can run real Tesseract or a stub; AI summaries are consultative only). No real auth secrets, PHI, EHR/MIS integration, or payments. The partner clinic is anonymized and all data is synthetic.
+An anonymized, synthetic-data showcase; the production codebase is private under NDA. Optimized for pilot clarity, not production completeness — mocked/simulated where it should be (OCR can run real Tesseract or a stub; AI summaries are consultative only). No real auth secrets, PHI, EHR/MIS integration, or payments. The partner clinic is anonymized and all data is synthetic.
 
 Built by [Egor Dranev](https://github.com/EgorDranev).
