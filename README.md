@@ -2,8 +2,6 @@
 
 **Digital hub for the chronic patient journey between visits — and preparation for the in-person appointment — across a three-tier clinic–doctor–patient system.**
 
-IntelDoc turns the dead time before a doctor's visit into structured preparation — so patients arrive ready and the doctor opens a summary instead of a blank page.
-
 A full-stack pilot build for a real clinical pilot: a React front end covering all three surfaces, and a FastAPI/PostgreSQL backend that makes the patient → doctor → admin loop real — OTP auth, uploads, OCR, audit, server-enforced access control, and admin KPIs.
 
 **What it demonstrates:** full-stack product engineering across mobile + web, a real auth / upload / OCR / audit backend, and compliance-aware design — explicit access transparency, a PII-blind admin role, and consultative-only AI.
